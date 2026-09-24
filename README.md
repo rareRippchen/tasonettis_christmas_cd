@@ -18,7 +18,7 @@ python3 -m http.server 8000
 | Tastonettis-Logo | Datei als `assets/tastonettis-logo.png` ablegen. Solange sie fehlt, wird der Schriftzug angezeigt. |
 | Albumcover | Bild nach `assets/` legen und `src` von `.cover` in `index.html` anpassen. |
 | CD-Titel / Interpret | `.title` und `.artist` in `index.html` |
-| Streaming-Links | `href` der Einträge in `.services` (derzeit Such-Links als Platzhalter) |
+| Streaming-Links | `href` der Einträge in `.services` (Spotify/Apple Music: Künstlerseiten; übrige Dienste: Such-Links als Platzhalter) |
 | Impressum / Datenschutz | Links im `<footer>` (derzeit `https://tastonettis.de/impressum` und `/datenschutz`) |
 
 ## DSGVO
