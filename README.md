@@ -19,6 +19,18 @@ python3 -m http.server 8000
 | Albumcover | Bild nach `assets/` legen und `src` von `.cover` in `index.html` anpassen. |
 | CD-Titel / Interpret | `.title` und `.artist` in `index.html` |
 | Streaming-Links | `href` der Einträge in `.services` (derzeit Such-Links als Platzhalter) |
-| Impressum | Link im `<footer>` (derzeit `https://tastonettis.de/impressum`) |
+| Impressum / Datenschutz | Links im `<footer>` (derzeit `https://tastonettis.de/impressum` und `/datenschutz`) |
+
+## DSGVO
+
+Die Seite lädt **nichts von fremden Servern**: Schriften (Inter, Playfair Display, Caveat) liegen unter `assets/fonts/`, alle Bilder und Icons unter `assets/`. Es gibt keine Cookies, kein Tracking und keine eingebetteten Player. Externe Dienste werden nur über normale Links erreicht, also erst, wenn man darauf klickt.
+
+Die Regeln für künftige Änderungen stehen in `CLAUDE.md`. Prüfen lässt sich das mit:
+
+```sh
+python3 scripts/check-external.py
+```
+
+Die Prüfung läuft auch automatisch als GitHub Action bei jedem Push.
 
 Markenlogos der Streamingdienste stammen aus [Simple Icons](https://simpleicons.org/) (CC0); Amazon Music und Qobuz sind vereinfachte Nachzeichnungen.
