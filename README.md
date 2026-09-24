@@ -2,7 +2,7 @@
 
 Statische Landingpage für die Weihnachts-CD der Tastonettis: Logo, Weihnachtsgruß, Albumcover, Streaming-Links und Impressum. Im unteren Bereich kann man Schnee wegwischen und damit einen Schneemann bauen.
 
-Aktuell mit dem Platzhalter **„Klavier To Go“**.
+Aktuell mit dem Platzhalter **„Klavier To Go“** (2017, UPC 4050215330047).
 
 ## Lokal ansehen
 
@@ -15,15 +15,15 @@ python3 -m http.server 8000
 
 | Was | Wo |
 | --- | --- |
-| Tastonettis-Logo | Datei als `assets/tastonettis-logo.png` ablegen. Solange sie fehlt, wird der Schriftzug angezeigt. |
-| Albumcover | Bild nach `assets/` legen und `src` von `.cover` in `index.html` anpassen. |
+| Tastonettis-Logo | `assets/tastonettis-logo.svg` (von tastonettis.de) |
+| Albumcover | Bild nach `assets/` legen und `src` von `.cover` in `index.html` anpassen (derzeit `assets/cover-klavier-to-go.jpg`). |
 | CD-Titel / Interpret | `.title` und `.artist` in `index.html` |
-| Streaming-Links | `href` der Einträge in `.services` (Spotify/Apple Music: Künstlerseiten; übrige Dienste: Such-Links als Platzhalter) |
-| Impressum / Datenschutz | Links im `<footer>` (derzeit `https://tastonettis.de/impressum` und `/datenschutz`) |
+| Streaming-Links | `href` der Einträge in `.services` – direkte Album-Links; Amazon Music: Suche, YouTube Music: Kanal |
+| Impressum / Datenschutz | Links im `<footer>` (`https://tastonettis.de/impressum.php` und `/datenschutz.php`) |
 
 ## DSGVO
 
-Die Seite lädt **nichts von fremden Servern**: Schriften (Inter, Playfair Display, Caveat) liegen unter `assets/fonts/`, alle Bilder und Icons unter `assets/`. Es gibt keine Cookies, kein Tracking und keine eingebetteten Player. Externe Dienste werden nur über normale Links erreicht, also erst, wenn man darauf klickt.
+Die Seite lädt **nichts von fremden Servern**: die Schrift (Plus Jakarta Sans) liegt unter `assets/fonts/`, alle Bilder und Icons unter `assets/`. Es gibt keine Cookies, kein Tracking und keine eingebetteten Player. Externe Dienste werden nur über normale Links erreicht, also erst, wenn man darauf klickt.
 
 Die Regeln für künftige Änderungen stehen in `CLAUDE.md`. Prüfen lässt sich das mit:
 

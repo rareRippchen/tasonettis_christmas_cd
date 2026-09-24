@@ -1,38 +1,32 @@
-/* Lokal gehostete Schriften (DSGVO): keine Anfragen an Google Fonts.
-   Quelle: Fontsource, Lizenz: SIL Open Font License 1.1 (siehe assets/fonts/LICENSE-*.txt) */
+/* Lokal gehostete Schrift (DSGVO): keine Anfragen an Google Fonts.
+   Plus Jakarta Sans – Quelle: Fontsource, Lizenz: SIL Open Font License 1.1
+   (siehe assets/fonts/LICENSE-plus-jakarta-sans.txt) */
 
 @font-face {
-  font-family: "Inter";
+  font-family: "Plus Jakarta Sans";
   font-style: normal;
   font-weight: 400;
   font-display: swap;
-  src: url("../assets/fonts/inter-latin-400-normal.woff2") format("woff2");
+  src: url("../assets/fonts/plus-jakarta-sans-latin-400-normal.woff2") format("woff2");
 }
 @font-face {
-  font-family: "Inter";
+  font-family: "Plus Jakarta Sans";
   font-style: normal;
   font-weight: 500;
   font-display: swap;
-  src: url("../assets/fonts/inter-latin-500-normal.woff2") format("woff2");
+  src: url("../assets/fonts/plus-jakarta-sans-latin-500-normal.woff2") format("woff2");
 }
 @font-face {
-  font-family: "Inter";
+  font-family: "Plus Jakarta Sans";
   font-style: normal;
   font-weight: 600;
   font-display: swap;
-  src: url("../assets/fonts/inter-latin-600-normal.woff2") format("woff2");
+  src: url("../assets/fonts/plus-jakarta-sans-latin-600-normal.woff2") format("woff2");
 }
 @font-face {
-  font-family: "Playfair Display";
+  font-family: "Plus Jakarta Sans";
   font-style: normal;
-  font-weight: 700;
+  font-weight: 800;
   font-display: swap;
-  src: url("../assets/fonts/playfair-display-latin-700-normal.woff2") format("woff2");
-}
-@font-face {
-  font-family: "Caveat";
-  font-style: normal;
-  font-weight: 700;
-  font-display: swap;
-  src: url("../assets/fonts/caveat-latin-700-normal.woff2") format("woff2");
+  src: url("../assets/fonts/plus-jakarta-sans-latin-800-normal.woff2") format("woff2");
 }
