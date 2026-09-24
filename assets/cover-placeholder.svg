@@ -1,0 +1,55 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 600" role="img" aria-label="Albumcover Klavier To Go (Platzhalter)">
+  <rect width="600" height="600" fill="#ffffff"/>
+  <!-- Linkes Gehäuse (Knopfseite mit bunten Namensschildern) -->
+  <rect x="20" y="130" width="120" height="340" rx="6" fill="#d7141a"/>
+  <g>
+    <rect x="30" y="145" width="100" height="14" fill="#1d4ed8"/>
+    <rect x="30" y="163" width="100" height="14" fill="#facc15"/>
+    <rect x="30" y="181" width="100" height="14" fill="#16a34a"/>
+    <rect x="30" y="199" width="100" height="14" fill="#f97316"/>
+    <rect x="30" y="217" width="100" height="14" fill="#ffffff"/>
+    <rect x="30" y="235" width="100" height="14" fill="#7c3aed"/>
+    <rect x="30" y="253" width="100" height="14" fill="#0ea5e9"/>
+    <rect x="30" y="271" width="100" height="14" fill="#facc15"/>
+    <rect x="30" y="289" width="100" height="14" fill="#dc2626"/>
+    <rect x="30" y="307" width="100" height="14" fill="#16a34a"/>
+    <rect x="30" y="325" width="100" height="14" fill="#1d4ed8"/>
+    <rect x="30" y="343" width="100" height="14" fill="#f472b6"/>
+    <rect x="30" y="361" width="100" height="14" fill="#ffffff"/>
+    <rect x="30" y="379" width="100" height="14" fill="#f97316"/>
+    <rect x="30" y="397" width="100" height="14" fill="#0ea5e9"/>
+    <rect x="30" y="415" width="100" height="14" fill="#facc15"/>
+    <rect x="30" y="433" width="100" height="14" fill="#7c3aed"/>
+    <rect x="30" y="451" width="100" height="10" fill="#16a34a"/>
+  </g>
+  <!-- Balg -->
+  <rect x="140" y="140" width="290" height="320" fill="#e8e2d6"/>
+  <g fill="#b9ae98">
+    <rect x="148" y="140" width="6" height="320"/><rect x="166" y="140" width="6" height="320"/>
+    <rect x="184" y="140" width="6" height="320"/><rect x="202" y="140" width="6" height="320"/>
+    <rect x="220" y="140" width="6" height="320"/><rect x="238" y="140" width="6" height="320"/>
+    <rect x="256" y="140" width="6" height="320"/><rect x="274" y="140" width="6" height="320"/>
+    <rect x="292" y="140" width="6" height="320"/><rect x="310" y="140" width="6" height="320"/>
+    <rect x="328" y="140" width="6" height="320"/><rect x="346" y="140" width="6" height="320"/>
+    <rect x="364" y="140" width="6" height="320"/><rect x="382" y="140" width="6" height="320"/>
+    <rect x="400" y="140" width="6" height="320"/><rect x="418" y="140" width="6" height="320"/>
+  </g>
+  <path d="M145 140 L285 300 L145 460 M425 140 L285 300 L425 460" fill="none" stroke="#d7141a" stroke-width="22" opacity=".85"/>
+  <!-- Rechtes Gehäuse (Diskant) -->
+  <rect x="430" y="130" width="150" height="340" rx="6" fill="#d7141a"/>
+  <rect x="495" y="145" width="75" height="310" rx="4" fill="#f4f4f4"/>
+  <polygon points="508,160 508,190 530,175" fill="#16a34a"/>
+  <g fill="#1f2937">
+    <circle cx="510" cy="215" r="6"/><circle cx="530" cy="215" r="6"/><circle cx="550" cy="215" r="6"/>
+    <circle cx="520" cy="238" r="6"/><circle cx="540" cy="238" r="6"/><circle cx="560" cy="238" r="6"/>
+    <circle cx="510" cy="261" r="6"/><circle cx="530" cy="261" r="6"/><circle cx="550" cy="261" r="6"/>
+    <circle cx="520" cy="284" r="6"/><circle cx="540" cy="284" r="6"/><circle cx="560" cy="284" r="6"/>
+    <circle cx="510" cy="307" r="6"/><circle cx="530" cy="307" r="6"/><circle cx="550" cy="307" r="6"/>
+    <circle cx="520" cy="330" r="6"/><circle cx="540" cy="330" r="6"/><circle cx="560" cy="330" r="6"/>
+    <circle cx="510" cy="353" r="6"/><circle cx="530" cy="353" r="6"/><circle cx="550" cy="353" r="6"/>
+    <circle cx="520" cy="376" r="6"/><circle cx="540" cy="376" r="6"/><circle cx="560" cy="376" r="6"/>
+    <circle cx="510" cy="399" r="6"/><circle cx="530" cy="399" r="6"/><circle cx="550" cy="399" r="6"/>
+  </g>
+  <text x="470" y="300" transform="rotate(-90 470 300)" text-anchor="middle" font-family="Georgia, serif" font-size="22" fill="#ffffff">Klavier to go</text>
+  <path d="M580 180 C600 240 600 360 580 420" fill="none" stroke="#1f2937" stroke-width="4"/>
+</svg>

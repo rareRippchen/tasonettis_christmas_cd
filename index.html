@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Tastonettis – Klavier To Go</title>
+  <meta name="description" content="Frohe Weihnachten von den Tastonettis! Hört „Klavier To Go“ jetzt auf eurem Lieblings-Streamingdienst.">
+  <meta name="theme-color" content="#141820">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Playfair+Display:wght@700&family=Caveat:wght@700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <canvas id="snowfall" aria-hidden="true"></canvas>
+
+  <main class="page">
+    <header class="header">
+      <!-- Echtes Logo als assets/tastonettis-logo.png ablegen – bis dahin erscheint der Schriftzug. -->
+      <a class="logo" href="https://tastonettis.de/" aria-label="Tastonettis – zur Website">
+        <img src="assets/tastonettis-logo.png" alt="Tastonettis"
+             onerror="this.hidden=true; this.nextElementSibling.hidden=false;">
+        <span class="logo-text" hidden>Tastonettis</span>
+      </a>
+      <p class="greeting">🎄 Frohe Weihnachten 🎄</p>
+    </header>
+
+    <section class="release">
+      <!-- Echtes Cover als assets/cover.jpg ablegen und src anpassen. -->
+      <img class="cover" src="assets/cover-placeholder.svg" alt="Albumcover „Klavier To Go“" width="280" height="280">
+      <h1 class="title">Klavier To Go</h1>
+      <p class="artist">Tastonettis</p>
+    </section>
+
+    <section class="streaming" aria-labelledby="stream-heading">
+      <h2 id="stream-heading" class="section-label">Jetzt streamen</h2>
+      <!-- Platzhalter-Links: durch die direkten Album-Links ersetzen. -->
+      <ul class="services">
+        <li><a class="service" href="https://open.spotify.com/search/Tastonettis%20Klavier%20To%20Go" target="_blank" rel="noopener">
+          <img src="assets/icons/spotify.svg" alt="" width="30" height="30"><span>Spotify</span><span class="arrow" aria-hidden="true">→</span></a></li>
+        <li><a class="service" href="https://music.apple.com/de/search?term=Tastonettis%20Klavier%20To%20Go" target="_blank" rel="noopener">
+          <img src="assets/icons/applemusic.svg" alt="" width="30" height="30"><span>Apple Music</span><span class="arrow" aria-hidden="true">→</span></a></li>
+        <li><a class="service" href="https://music.amazon.de/search/Tastonettis%20Klavier%20To%20Go" target="_blank" rel="noopener">
+          <img src="assets/icons/amazonmusic.svg" alt="" width="30" height="30"><span>Amazon Music</span><span class="arrow" aria-hidden="true">→</span></a></li>
+        <li><a class="service" href="https://music.youtube.com/search?q=Tastonettis%20Klavier%20To%20Go" target="_blank" rel="noopener">
+          <img src="assets/icons/youtubemusic.svg" alt="" width="30" height="30"><span>YouTube Music</span><span class="arrow" aria-hidden="true">→</span></a></li>
+        <li><a class="service" href="https://www.deezer.com/search/Tastonettis%20Klavier%20To%20Go" target="_blank" rel="noopener">
+          <img src="assets/icons/deezer.svg" alt="" width="30" height="30"><span>Deezer</span><span class="arrow" aria-hidden="true">→</span></a></li>
+        <li><a class="service" href="https://listen.tidal.com/search?q=Tastonettis%20Klavier%20To%20Go" target="_blank" rel="noopener">
+          <img src="assets/icons/tidal.svg" alt="" width="30" height="30"><span>Tidal</span><span class="arrow" aria-hidden="true">→</span></a></li>
+        <li><a class="service" href="https://www.qobuz.com/de-de/search?q=Tastonettis%20Klavier%20To%20Go" target="_blank" rel="noopener">
+          <img src="assets/icons/qobuz.svg" alt="" width="30" height="30"><span>Qobuz</span><span class="arrow" aria-hidden="true">→</span></a></li>
+      </ul>
+    </section>
+
+    <p class="hint">❄️ Wische den Schnee weg und baue einen Schneemann! ❄️</p>
+
+    <div class="snowfield" id="snowfield">
+      <canvas id="snowlayer" aria-label="Schneefeld zum Wegwischen"></canvas>
+      <canvas id="snowman" aria-hidden="true"></canvas>
+    </div>
+
+    <footer class="footer">
+      <a href="https://tastonettis.de/impressum" target="_blank" rel="noopener">Impressum</a>
+    </footer>
+  </main>
+
+  <script src="js/snow.js"></script>
+</body>
+</html>
