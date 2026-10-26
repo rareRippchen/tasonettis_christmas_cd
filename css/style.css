@@ -173,6 +173,16 @@ body {
 .snow-skip:hover, .snow-skip:focus-visible { color: #1b1e24; background: #fff; }
 .snow-skip:focus-visible { outline: 2px solid var(--red); outline-offset: 2px; }
 
+/* Easter Egg: Schneekugel – über allem, aber nicht anklickbar */
+#snowglobe {
+  position: fixed;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 11;
+  pointer-events: none;
+}
+
 /* Fertiger Schneemann am Seitenende */
 .snowman-slot { margin-top: 28px; animation: pop-in .8s ease both; }
 .snowman-slot canvas { display: block; width: 160px; height: 170px; }

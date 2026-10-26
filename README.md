@@ -2,6 +2,8 @@
 
 Statische Landingpage für die Weihnachts-CD der Tastonettis: Logo, Weihnachtsgruß, Albumcover, Streaming-Links und Impressum. Beim Laden liegt die ganze Seite unter einer Schneedecke: Wer sie mit dem Finger (oder der Maus) freischiebt, baut dabei einen Schneemann. Ab etwa der Hälfte rutscht der Rest ab, und der fertige Schneemann steht unten auf der Seite. Oben rechts lässt sich der Schnee auch überspringen.
 
+**Easter Egg:** Schüttelt man das Handy, schneit es wie in einer Schneekugel (`js/snowglobe.js`). Auf dem iPhone fragt iOS nach dem ersten Wischen einmal nach der Erlaubnis für Bewegungsdaten. Die Sensordaten werden nur im Browser ausgewertet und nirgendwohin gesendet.
+
 Aktuell mit dem Platzhalter **„Klavier To Go“** (2017, UPC 4050215330047).
 
 ## Lokal ansehen
