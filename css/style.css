@@ -111,17 +111,62 @@ body {
 .service:hover .arrow, .service:focus-visible .arrow { color: var(--text); transform: translateX(3px); }
 .service:focus-visible { outline: 2px solid var(--red); outline-offset: 2px; }
 
-/* Schnee-Spiel */
-.hint { margin: 28px 0 8px; font-size: 13px; color: #c3c7cf; }
-.snowfield {
-  position: relative;
-  width: 100%;
-  height: 170px;
+/* Schneedecke */
+.snowcover { display: none; }
+.snowed, .snowed body { overflow: hidden; }
+.snowed .snowcover {
+  display: block;
+  position: fixed;
+  inset: 0;
+  z-index: 10;
   touch-action: none;
   cursor: grab;
+  /* Bis das Canvas gezeichnet ist, deckt die Hintergrundfarbe schon alles ab. */
+  background: #f4f7fb;
+  transition: opacity 1.2s ease, transform 1.2s ease;
 }
-.snowfield canvas { position: absolute; inset: 0; width: 100%; height: 100%; }
+.snowed .snowcover.ready { background: transparent; }
+.snowcover:active { cursor: grabbing; }
+.snowcover.melting { opacity: 0; transform: translateY(40px); pointer-events: none; }
+.snowcover canvas { position: absolute; inset: 0; width: 100%; height: 100%; }
 #snowman { pointer-events: none; }
+.snow-hint {
+  position: absolute;
+  left: 50%;
+  top: 38%;
+  transform: translate(-50%, -50%);
+  margin: 0;
+  width: max-content;
+  max-width: calc(100% - 32px);
+  font-size: 20px;
+  font-weight: 800;
+  line-height: 1.35;
+  text-align: center;
+  color: #5b6b80;
+  pointer-events: none;
+  transition: opacity .6s ease;
+}
+.snow-hint.gone { opacity: 0; }
+.snow-skip {
+  position: absolute;
+  right: 16px;
+  top: 16px;
+  padding: 8px 14px;
+  font: inherit;
+  font-size: 13px;
+  color: #5b6b80;
+  background: rgba(255, 255, 255, .7);
+  border: 1px solid #c9d4e1;
+  border-radius: 999px;
+  cursor: pointer;
+}
+.snow-skip:hover, .snow-skip:focus-visible { color: #1b1e24; background: #fff; }
+.snow-skip:focus-visible { outline: 2px solid var(--red); outline-offset: 2px; }
+
+/* Fertiger Schneemann am Seitenende */
+.snowman-slot { margin-top: 28px; animation: pop-in .8s ease both; }
+.snowman-slot canvas { display: block; width: 160px; height: 170px; }
+@keyframes pop-in { from { opacity: 0; transform: translateY(12px); } }
 
 /* Fuß */
 .footer { margin-top: 24px; display: flex; gap: 20px; }
@@ -129,5 +174,6 @@ body {
 .footer a:hover { color: var(--text); }
 
 @media (prefers-reduced-motion: reduce) {
-  .service, .service .arrow { transition: none; }
+  .service, .service .arrow, .snowcover, .snow-hint { transition: none; }
+  .snowman-slot { animation: none; }
 }

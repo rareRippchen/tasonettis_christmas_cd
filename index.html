@@ -9,6 +9,7 @@
   <link rel="icon" href="assets/favicon.ico">
   <link rel="stylesheet" href="css/fonts.css">
   <link rel="stylesheet" href="css/style.css">
+  <script>document.documentElement.classList.add("snowed");</script>
 </head>
 <body>
   <canvas id="snowfall" aria-hidden="true"></canvas>
@@ -48,11 +49,8 @@
       </ul>
     </section>
 
-    <p class="hint">❄️ Wische den Schnee weg und baue einen Schneemann! ❄️</p>
-
-    <div class="snowfield" id="snowfield">
-      <canvas id="snowlayer" aria-label="Schneefeld zum Wegwischen"></canvas>
-      <canvas id="snowman" aria-hidden="true"></canvas>
+    <div class="snowman-slot" id="snowman-slot" hidden>
+      <canvas id="snowman-final" aria-label="Schneemann"></canvas>
     </div>
 
     <footer class="footer">
@@ -60,6 +58,14 @@
       <a href="https://tastonettis.de/datenschutz.php" target="_blank" rel="noopener">Datenschutz</a>
     </footer>
   </main>
+
+  <!-- Schneedecke über der ganzen Seite: wegschieben baut den Schneemann. -->
+  <div class="snowcover" id="snowcover">
+    <canvas id="snowlayer" aria-hidden="true"></canvas>
+    <canvas id="snowman" aria-hidden="true"></canvas>
+    <p class="snow-hint" id="snow-hint">Schieb den Schnee weg<br>und bau einen Schneemann! ☃</p>
+    <button type="button" class="snow-skip" id="snow-skip">Schnee überspringen</button>
+  </div>
 
   <script src="js/snow.js"></script>
 </body>

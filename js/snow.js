@@ -3,6 +3,7 @@
 
   var reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
   var dpr = Math.min(window.devicePixelRatio || 1, 2);
+  var root = document.documentElement;
 
   /* ---------- Fallender Schnee im Hintergrund ---------- */
   var sky = document.getElementById("snowfall");
@@ -46,68 +47,213 @@
     }
   }
 
-  /* ---------- Schneefeld zum Wegwischen ---------- */
-  var field = document.getElementById("snowfield");
+  /* ---------- Schneemann (wird an zwei Stellen gezeichnet) ---------- */
+
+  // shown: 0..5 – Unterkugel, Mittelkugel, Kopf, Gesicht+Arme, Mütze+Schal.
+  function drawSnowman(ctx, cx, ground, s, shown) {
+    function grow(v) { return Math.max(0, Math.min(1, v)); }
+    function dot(x, y, r, color) {
+      ctx.fillStyle = color;
+      ctx.beginPath();
+      ctx.arc(x, y, r, 0, Math.PI * 2);
+      ctx.fill();
+    }
+    function ball(x, y, r) {
+      var g = ctx.createRadialGradient(x - r * 0.35, y - r * 0.35, r * 0.1, x, y, r);
+      g.addColorStop(0, "#ffffff");
+      g.addColorStop(1, "#cbd7e4");
+      ctx.fillStyle = g;
+      ctx.beginPath();
+      ctx.arc(x, y, r, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.strokeStyle = "rgba(120, 140, 165, .35)";
+      ctx.lineWidth = 1;
+      ctx.stroke();
+    }
+
+    if (shown <= 0.001) return;
+    var r1 = 34 * s, r2 = 25 * s, r3 = 18 * s;
+    var g1 = grow(shown), g2 = grow(shown - 1), g3 = grow(shown - 2);
+    var g4 = grow(shown - 3), g5 = grow(shown - 4);
+
+    // Schatten
+    ctx.fillStyle = "rgba(60, 80, 110, .18)";
+    ctx.beginPath();
+    ctx.ellipse(cx, ground, r1 * 1.1 * g1, 6 * s * g1, 0, 0, Math.PI * 2);
+    ctx.fill();
+
+    var y1 = ground - r1 * g1;
+    if (g1 > 0) ball(cx, y1, r1 * g1);
+    var y2 = y1 - r1 * 0.8 - r2 * 0.8;
+    if (g2 > 0) ball(cx, y2, r2 * g2);
+    var y3 = y2 - r2 * 0.8 - r3 * 0.8;
+    if (g3 > 0) ball(cx, y3, r3 * g3);
+
+    if (g4 > 0) {
+      ctx.globalAlpha = g4;
+      dot(cx - 6 * s, y3 - 4 * s, 2.2 * s, "#1b1e24");
+      dot(cx + 6 * s, y3 - 4 * s, 2.2 * s, "#1b1e24");
+      dot(cx, y2 - 8 * s, 2.6 * s, "#1b1e24");
+      dot(cx, y2 + 2 * s, 2.6 * s, "#1b1e24");
+      dot(cx, y2 + 12 * s, 2.6 * s, "#1b1e24");
+      ctx.fillStyle = "#f28c28";
+      ctx.beginPath();
+      ctx.moveTo(cx, y3 + 1 * s);
+      ctx.lineTo(cx + 15 * s, y3 + 4 * s);
+      ctx.lineTo(cx, y3 + 5 * s);
+      ctx.closePath();
+      ctx.fill();
+      ctx.strokeStyle = "#6b4a2b";
+      ctx.lineWidth = 2.5 * s;
+      ctx.lineCap = "round";
+      ctx.beginPath();
+      ctx.moveTo(cx - r2 * 0.9, y2);
+      ctx.lineTo(cx - r2 * 2.1, y2 - 16 * s);
+      ctx.moveTo(cx - r2 * 1.7, y2 - 11 * s);
+      ctx.lineTo(cx - r2 * 1.9, y2 - 20 * s);
+      ctx.moveTo(cx + r2 * 0.9, y2);
+      ctx.lineTo(cx + r2 * 2.1, y2 - 16 * s);
+      ctx.moveTo(cx + r2 * 1.7, y2 - 11 * s);
+      ctx.lineTo(cx + r2 * 1.9, y2 - 20 * s);
+      ctx.stroke();
+      ctx.globalAlpha = 1;
+    }
+
+    if (g5 > 0) {
+      ctx.globalAlpha = g5;
+      // Rote Mütze mit Bommel
+      ctx.fillStyle = "#e3141b";
+      ctx.beginPath();
+      ctx.moveTo(cx - r3 * 1.0, y3 - r3 * 0.55);
+      ctx.quadraticCurveTo(cx, y3 - r3 * 2.6, cx + r3 * 1.3, y3 - r3 * 1.7);
+      ctx.lineTo(cx + r3 * 1.0, y3 - r3 * 0.55);
+      ctx.closePath();
+      ctx.fill();
+      ctx.fillStyle = "#ffffff";
+      ctx.fillRect(cx - r3 * 1.05, y3 - r3 * 0.75, r3 * 2.1, r3 * 0.35);
+      dot(cx + r3 * 1.3, y3 - r3 * 1.7, 4 * s, "#ffffff");
+      // Schal
+      ctx.fillStyle = "#e3141b";
+      ctx.fillRect(cx - r3 * 0.95, y3 + r3 * 0.6, r3 * 1.9, 6 * s);
+      ctx.fillRect(cx + r3 * 0.3, y3 + r3 * 0.6, 6 * s, 18 * s);
+      ctx.globalAlpha = 1;
+    }
+  }
+
+  /* ---------- Schneedecke über der ganzen Seite ---------- */
+  var cover = document.getElementById("snowcover");
   var layer = document.getElementById("snowlayer");
   var layerCtx = layer.getContext("2d");
   var manCanvas = document.getElementById("snowman");
   var manCtx = manCanvas.getContext("2d");
+  var hint = document.getElementById("snow-hint");
+  var skip = document.getElementById("snow-skip");
+
+  var STAGES = [0.06, 0.15, 0.25, 0.36, 0.47]; // freigeschobener Anteil je Bauschritt
+  var REVEAL_AT = 0.5;                          // ab hier rutscht der Rest ab
+
   var W = 0, H = 0;
-  var progress = 0;       // 0..1, wie viel Schnee weggewischt wurde
-  var stage = 0;          // 0..5, Baufortschritt des Schneemanns
-  var shown = 0;          // animierter Wert für weiches Wachsen
+  var stage = 0;      // erreichter Bauschritt 0..5
+  var shown = 0;      // animierter Wert für weiches Wachsen
   var lastPoint = null;
   var measurePending = false;
+  var covered = true;
 
-  function resizeField() {
-    var rect = field.getBoundingClientRect();
-    W = rect.width;
-    H = rect.height;
+  function brushRadius() {
+    return Math.max(26, Math.min(48, Math.min(W, H) * 0.075));
+  }
+
+  function sizeCanvases(keepSnow) {
+    var old = null;
+    if (keepSnow && layer.width && layer.height) {
+      old = document.createElement("canvas");
+      old.width = layer.width;
+      old.height = layer.height;
+      old.getContext("2d").drawImage(layer, 0, 0);
+    }
+    W = window.innerWidth;
+    H = window.innerHeight;
     [layer, manCanvas].forEach(function (c) {
-      c.width = W * dpr;
-      c.height = H * dpr;
+      c.width = Math.round(W * dpr);
+      c.height = Math.round(H * dpr);
     });
     layerCtx.setTransform(dpr, 0, 0, dpr, 0, 0);
     manCtx.setTransform(dpr, 0, 0, dpr, 0, 0);
-    fillSnow();
-    progress = 0;
-    stage = 0;
+    if (old) {
+      layerCtx.drawImage(old, 0, 0, W, H);
+    } else {
+      paintSnow();
+    }
   }
 
-  // Schneedecke: welliger Hügel aus weißen Kreisen.
-  function fillSnow() {
+  // Dichte Schneedecke: Verlauf, weiche Verwehungen und Glitzer.
+  function paintSnow() {
     layerCtx.globalCompositeOperation = "source-over";
-    layerCtx.clearRect(0, 0, W, H);
     var grad = layerCtx.createLinearGradient(0, 0, 0, H);
-    grad.addColorStop(0, "#ffffff");
-    grad.addColorStop(1, "#d9e3ee");
+    grad.addColorStop(0, "#fbfdff");
+    grad.addColorStop(1, "#e3eaf3");
     layerCtx.fillStyle = grad;
-    layerCtx.beginPath();
-    layerCtx.moveTo(0, H);
-    for (var x = 0; x <= W; x += 8) {
-      var y = H * 0.18 + Math.sin(x / 38) * 8 + Math.sin(x / 13) * 3;
-      layerCtx.lineTo(x, y);
+    layerCtx.fillRect(0, 0, W, H);
+
+    var drifts = Math.round(W * H / 14000);
+    for (var i = 0; i < drifts; i++) {
+      var x = Math.random() * W, y = Math.random() * H;
+      var r = 40 + Math.random() * 120;
+      var g = layerCtx.createRadialGradient(x, y - r * 0.3, 0, x, y, r);
+      g.addColorStop(0, "rgba(255, 255, 255, .7)");
+      g.addColorStop(0.7, "rgba(235, 241, 248, .25)");
+      g.addColorStop(1, "rgba(200, 214, 230, 0)");
+      layerCtx.fillStyle = g;
+      layerCtx.beginPath();
+      layerCtx.ellipse(x, y, r * 1.6, r, 0, 0, Math.PI * 2);
+      layerCtx.fill();
     }
-    layerCtx.lineTo(W, H);
-    layerCtx.closePath();
-    layerCtx.fill();
-    // Glitzern
-    for (var i = 0; i < W / 4; i++) {
-      layerCtx.fillStyle = "rgba(180, 200, 225, .6)";
-      layerCtx.fillRect(Math.random() * W, H * 0.3 + Math.random() * H * 0.7, 1.5, 1.5);
+
+    var sparkles = Math.round(W * H / 600);
+    for (var j = 0; j < sparkles; j++) {
+      layerCtx.fillStyle = Math.random() < 0.5 ? "rgba(170, 190, 215, .55)" : "rgba(255, 255, 255, .9)";
+      layerCtx.fillRect(Math.random() * W, Math.random() * H, 1.4, 1.4);
     }
   }
 
-  function wipe(x, y) {
+  // Ein Stempel: weich wegschieben, am Rand bleibt ein leichter Schneewall.
+  function stamp(x, y, r) {
     layerCtx.globalCompositeOperation = "destination-out";
-    layerCtx.lineCap = "round";
-    layerCtx.lineWidth = 34;
+    var g = layerCtx.createRadialGradient(x, y, r * 0.55, x, y, r);
+    g.addColorStop(0, "rgba(0, 0, 0, 1)");
+    g.addColorStop(1, "rgba(0, 0, 0, 0)");
+    layerCtx.fillStyle = g;
     layerCtx.beginPath();
-    if (lastPoint) layerCtx.moveTo(lastPoint.x, lastPoint.y);
-    else layerCtx.moveTo(x - 0.1, y);
-    layerCtx.lineTo(x, y);
-    layerCtx.stroke();
+    layerCtx.arc(x, y, r, 0, Math.PI * 2);
+    layerCtx.fill();
+
+    // Schattenkante nur dort, wo noch Schnee liegt.
+    layerCtx.globalCompositeOperation = "source-atop";
+    var edge = layerCtx.createRadialGradient(x, y, r * 0.9, x, y, r * 1.35);
+    edge.addColorStop(0, "rgba(120, 145, 180, 0)");
+    edge.addColorStop(0.3, "rgba(120, 145, 180, .07)");
+    edge.addColorStop(1, "rgba(120, 145, 180, 0)");
+    layerCtx.fillStyle = edge;
+    layerCtx.beginPath();
+    layerCtx.arc(x, y, r * 1.35, 0, Math.PI * 2);
+    layerCtx.fill();
+    layerCtx.globalCompositeOperation = "source-over";
+  }
+
+  function push(x, y) {
+    var r = brushRadius();
+    if (lastPoint) {
+      var dx = x - lastPoint.x, dy = y - lastPoint.y;
+      var dist = Math.sqrt(dx * dx + dy * dy);
+      var steps = Math.max(1, Math.ceil(dist / (r * 0.35)));
+      for (var i = 1; i <= steps; i++) {
+        stamp(lastPoint.x + dx * i / steps, lastPoint.y + dy * i / steps, r);
+      }
+    } else {
+      stamp(x, y, r);
+    }
     lastPoint = { x: x, y: y };
+    hint.classList.add("gone");
     scheduleMeasure();
   }
 
@@ -120,150 +266,92 @@
     }, 150);
   }
 
-  // Grob abtasten, wie viel Schnee noch liegt.
+  // Grob abtasten, wie viel der Fläche schon frei ist.
   function measure() {
+    if (!covered) return;
     var data = layerCtx.getImageData(0, 0, layer.width, layer.height).data;
-    var step = 12 * dpr, total = 0, gone = 0;
-    for (var y = Math.floor(layer.height * 0.25); y < layer.height; y += step) {
+    var step = Math.round(14 * dpr), total = 0, free = 0;
+    for (var y = 0; y < layer.height; y += step) {
       for (var x = 0; x < layer.width; x += step) {
         total++;
-        if (data[(Math.floor(y) * layer.width + Math.floor(x)) * 4 + 3] < 40) gone++;
+        if (data[(y * layer.width + x) * 4 + 3] < 60) free++;
       }
     }
-    progress = total ? gone / total : 0;
-    var thresholds = [0.08, 0.2, 0.34, 0.48, 0.62];
+    var cleared = total ? free / total : 0;
     var s = 0;
-    while (s < thresholds.length && progress >= thresholds[s]) s++;
+    while (s < STAGES.length && cleared >= STAGES[s]) s++;
     if (s > stage) stage = s;
     if (reduceMotion) shown = stage;
+    if (cleared >= REVEAL_AT) reveal();
   }
 
   function point(e) {
-    var rect = layer.getBoundingClientRect();
-    return { x: e.clientX - rect.left, y: e.clientY - rect.top };
+    return { x: e.clientX, y: e.clientY };
   }
 
-  layer.addEventListener("pointerdown", function (e) {
-    layer.setPointerCapture(e.pointerId);
+  cover.addEventListener("pointerdown", function (e) {
+    if (e.target === skip) return;
+    cover.setPointerCapture(e.pointerId);
     lastPoint = null;
     var p = point(e);
-    wipe(p.x, p.y);
+    push(p.x, p.y);
   });
-  layer.addEventListener("pointermove", function (e) {
-    // Maus wischt beim Drüberfahren, Finger/Stift nur bei Berührung.
-    if (e.pointerType !== "mouse" && e.buttons === 0) return;
+  cover.addEventListener("pointermove", function (e) {
+    if (e.buttons === 0) return;
     var p = point(e);
-    wipe(p.x, p.y);
+    push(p.x, p.y);
   });
-  layer.addEventListener("pointerleave", function () { lastPoint = null; });
-  layer.addEventListener("pointerup", function () { lastPoint = null; });
+  cover.addEventListener("pointerup", function () { lastPoint = null; });
+  cover.addEventListener("pointercancel", function () { lastPoint = null; });
 
-  // Doppeltippen, wenn der Schneemann fertig ist: neuer Schnee.
-  layer.addEventListener("dblclick", function () {
-    if (stage >= 5) {
-      fillSnow();
-      progress = 0;
-      stage = 0;
-      shown = 0;
-    }
+  skip.addEventListener("click", function () {
+    stage = STAGES.length;
+    reveal();
   });
 
-  /* ---------- Schneemann ---------- */
-  function ball(x, y, r) {
-    var g = manCtx.createRadialGradient(x - r * 0.35, y - r * 0.35, r * 0.1, x, y, r);
-    g.addColorStop(0, "#ffffff");
-    g.addColorStop(1, "#cfdae6");
-    manCtx.fillStyle = g;
-    manCtx.beginPath();
-    manCtx.arc(x, y, r, 0, Math.PI * 2);
-    manCtx.fill();
+  // Rest der Schneedecke abrutschen lassen, Schneemann wandert ans Seitenende.
+  function reveal() {
+    if (!covered) return;
+    covered = false;
+    stage = STAGES.length;
+    var finish = function () {
+      root.classList.remove("snowed");
+      cover.remove();
+      showFinalSnowman();
+    };
+    // Kurz warten, damit man die Mütze noch aufgesetzt sieht.
+    setTimeout(function () {
+      cover.classList.add("melting");
+      if (reduceMotion) finish();
+      else setTimeout(finish, 1200);
+    }, reduceMotion ? 0 : 700);
   }
 
-  function dot(x, y, r, color) {
-    manCtx.fillStyle = color;
-    manCtx.beginPath();
-    manCtx.arc(x, y, r, 0, Math.PI * 2);
-    manCtx.fill();
+  function showFinalSnowman() {
+    var slot = document.getElementById("snowman-slot");
+    var c = document.getElementById("snowman-final");
+    var w = 160, h = 170;
+    c.width = w * dpr;
+    c.height = h * dpr;
+    var ctx = c.getContext("2d");
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    drawSnowman(ctx, w / 2, h - 10, 1, STAGES.length);
+    slot.hidden = false;
   }
 
-  function grow(v) { return Math.max(0, Math.min(1, v)); }
-
-  function drawSnowman() {
+  function drawCoverSnowman() {
     manCtx.clearRect(0, 0, W, H);
-    if (shown <= 0.001) return;
-    var cx = W / 2;
-    var ground = H - 10;
-    var s = Math.min(1, H / 170);
-    var r1 = 34 * s, r2 = 25 * s, r3 = 18 * s;
-
-    var g1 = grow(shown), g2 = grow(shown - 1), g3 = grow(shown - 2);
-    var g4 = grow(shown - 3), g5 = grow(shown - 4);
-
-    var y1 = ground - r1 * g1;
-    if (g1 > 0) ball(cx, y1, r1 * g1);
-    var y2 = y1 - r1 * 0.8 - r2 * 0.8;
-    if (g2 > 0) ball(cx, y2, r2 * g2);
-    var y3 = y2 - r2 * 0.8 - r3 * 0.8;
-    if (g3 > 0) ball(cx, y3, r3 * g3);
-
-    if (g4 > 0) {
-      manCtx.globalAlpha = g4;
-      // Augen, Knöpfe, Karottennase
-      dot(cx - 6 * s, y3 - 4 * s, 2.2 * s, "#1b1e24");
-      dot(cx + 6 * s, y3 - 4 * s, 2.2 * s, "#1b1e24");
-      dot(cx, y2 - 8 * s, 2.6 * s, "#1b1e24");
-      dot(cx, y2 + 2 * s, 2.6 * s, "#1b1e24");
-      dot(cx, y2 + 12 * s, 2.6 * s, "#1b1e24");
-      manCtx.fillStyle = "#f28c28";
-      manCtx.beginPath();
-      manCtx.moveTo(cx, y3 + 1 * s);
-      manCtx.lineTo(cx + 15 * s, y3 + 4 * s);
-      manCtx.lineTo(cx, y3 + 5 * s);
-      manCtx.closePath();
-      manCtx.fill();
-      // Ast-Arme
-      manCtx.strokeStyle = "#6b4a2b";
-      manCtx.lineWidth = 2.5 * s;
-      manCtx.lineCap = "round";
-      manCtx.beginPath();
-      manCtx.moveTo(cx - r2 * 0.9, y2);
-      manCtx.lineTo(cx - r2 * 2.1, y2 - 16 * s);
-      manCtx.moveTo(cx - r2 * 1.7, y2 - 11 * s);
-      manCtx.lineTo(cx - r2 * 1.9, y2 - 20 * s);
-      manCtx.moveTo(cx + r2 * 0.9, y2);
-      manCtx.lineTo(cx + r2 * 2.1, y2 - 16 * s);
-      manCtx.moveTo(cx + r2 * 1.7, y2 - 11 * s);
-      manCtx.lineTo(cx + r2 * 1.9, y2 - 20 * s);
-      manCtx.stroke();
-      manCtx.globalAlpha = 1;
-    }
-
-    if (g5 > 0) {
-      manCtx.globalAlpha = g5;
-      // Rote Tastonettis-Mütze mit Bommel
-      manCtx.fillStyle = "#e3141b";
-      manCtx.beginPath();
-      manCtx.moveTo(cx - r3 * 1.0, y3 - r3 * 0.55);
-      manCtx.quadraticCurveTo(cx, y3 - r3 * 2.6, cx + r3 * 1.3, y3 - r3 * 1.7);
-      manCtx.lineTo(cx + r3 * 1.0, y3 - r3 * 0.55);
-      manCtx.closePath();
-      manCtx.fill();
-      manCtx.fillStyle = "#ffffff";
-      manCtx.fillRect(cx - r3 * 1.05, y3 - r3 * 0.75, r3 * 2.1, r3 * 0.35);
-      dot(cx + r3 * 1.3, y3 - r3 * 1.7, 4 * s, "#ffffff");
-      // Schal
-      manCtx.fillStyle = "#e3141b";
-      manCtx.fillRect(cx - r3 * 0.95, y3 + r3 * 0.6, r3 * 1.9, 6 * s);
-      manCtx.fillRect(cx + r3 * 0.3, y3 + r3 * 0.6, 6 * s, 18 * s);
-      manCtx.globalAlpha = 1;
-    }
+    var s = Math.max(0.9, Math.min(1.6, Math.min(W, H) / 360));
+    drawSnowman(manCtx, W / 2, H - 28 * s, s, shown);
   }
 
   /* ---------- Schleife ---------- */
   function frame() {
     drawSky();
-    if (shown < stage) shown = Math.min(stage, shown + 0.04);
-    drawSnowman();
+    if (covered || cover.isConnected) {
+      if (shown < stage) shown = Math.min(stage, shown + 0.05);
+      drawCoverSnowman();
+    }
     requestAnimationFrame(frame);
   }
 
@@ -272,15 +360,12 @@
     clearTimeout(resizeTimer);
     resizeTimer = setTimeout(function () {
       resizeSky();
-      // Nur neu aufbauen, wenn sich die Breite ändert (mobile Adressleiste ändert nur die Höhe).
-      if (Math.abs(field.getBoundingClientRect().width - W) > 1) {
-        resizeField();
-        shown = 0;
-      }
+      if (cover.isConnected) sizeCanvases(true);
     }, 150);
   });
 
   resizeSky();
-  resizeField();
+  sizeCanvases(false);
+  cover.classList.add("ready");
   frame();
 })();
