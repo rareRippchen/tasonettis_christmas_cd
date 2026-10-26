@@ -29,6 +29,8 @@ body {
   height: 100%;
   pointer-events: none;
   z-index: 0;
+  /* Dunkler Hintergrund auch dann, wenn body beim Schnee hell ist. */
+  background: var(--bg);
 }
 
 .page {
@@ -36,7 +38,8 @@ body {
   z-index: 1;
   max-width: 440px;
   margin: 0 auto;
-  padding: 16px 16px 32px;
+  padding: max(16px, env(safe-area-inset-top)) max(16px, env(safe-area-inset-right))
+    max(32px, env(safe-area-inset-bottom)) max(16px, env(safe-area-inset-left));
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -117,6 +120,9 @@ body {
 /* Solange Schnee liegt, nichts unterhalb des Bildschirms rendern
    (iOS Safari zeigt Inhalte hinter der durchsichtigen Werkzeugleiste). */
 .snowed, .snowed body { height: 100%; }
+/* Falls iOS doch eine Fläche außerhalb der Schneedecke zeigt (hinter Leisten),
+   ist sie schneefarben statt dunkel. Freigeschobene Stellen bleiben dunkel (#snowfall). */
+.snowed, .snowed body { background: #e8eef5; }
 .snowed .snowcover {
   display: block;
   position: fixed;
@@ -159,8 +165,8 @@ body {
 .snow-hint.gone { opacity: 0; }
 .snow-skip {
   position: absolute;
-  right: 16px;
-  top: 16px;
+  right: max(16px, env(safe-area-inset-right));
+  top: max(16px, calc(env(safe-area-inset-top) + 8px));
   padding: 8px 14px;
   font: inherit;
   font-size: 13px;

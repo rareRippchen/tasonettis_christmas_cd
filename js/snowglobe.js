@@ -6,7 +6,7 @@
   "use strict";
 
   if (!("DeviceMotionEvent" in window)) return;
-  if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+  // Bewusst auch bei „Bewegung reduzieren“ aktiv: Es bewegt sich nur, wenn man selbst schüttelt.
 
   var canvas = document.getElementById("snowglobe");
   var ctx = canvas.getContext("2d");
@@ -30,6 +30,10 @@
   var lastSpawn = 0;
   var running = false;
   var lastTime = 0;
+
+  // Diagnose: Seite mit ?sensor aufrufen, dann zeigt eine kleine Box den Sensorstatus.
+  var debug = /[?&]sensor\b/.test(location.search) ? createDebug() : null;
+  var stats = { permission: "–", motionEvents: 0, orientationEvents: 0, accel: 0, beta: null, gamma: null };
 
   function resize() {
     W = window.innerWidth;
@@ -56,6 +60,9 @@
 
   // Lage des Handys: Richtung, in die Dinge auf dem Bildschirm fallen.
   function onOrientation(e) {
+    stats.orientationEvents++;
+    stats.beta = e.beta;
+    stats.gamma = e.gamma;
     if (e.beta === null || e.gamma === null) return;
     hasOrientation = true;
     var b = e.beta * Math.PI / 180;
@@ -66,6 +73,7 @@
   }
 
   function onMotion(e) {
+    stats.motionEvents++;
     var ig = e.accelerationIncludingGravity;
 
     // Ohne Lagesensor: Schwerkraft aus dem Beschleunigungssensor (Tiefpass).
@@ -88,6 +96,7 @@
     }
 
     var strength = Math.sqrt(ax * ax + ay * ay + az * az);
+    stats.accel = Math.max(stats.accel * 0.9, strength);
     if (strength < SHAKE_START) return;
     var power = Math.min(1, (strength - SHAKE_START) / 20);
 
@@ -232,27 +241,67 @@
     if (orientation) window.addEventListener("deviceorientation", onOrientation);
   }
 
-  // iOS fragt nach Erlaubnis – nur direkt in einer Berührung möglich, daher beide Abfragen sofort.
+  // iOS fragt nach Erlaubnis – nur direkt in einer Berührung möglich, daher beide Abfragen sofort
+  // im selben Handler. Schlägt die Abfrage technisch fehl, wird beim nächsten Tipp erneut gefragt;
+  // nur ein ausdrückliches „Nicht erlauben“ ist endgültig.
+  function request(Ctor) {
+    if (!Ctor || typeof Ctor.requestPermission !== "function") return Promise.resolve("granted");
+    try {
+      return Promise.resolve(Ctor.requestPermission()).catch(function (err) {
+        return "error: " + (err && err.name || err);
+      });
+    } catch (err) {
+      return Promise.resolve("error: " + (err && err.name || err));
+    }
+  }
+
   if (typeof DeviceMotionEvent.requestPermission === "function") {
-    var asked = false;
+    var busy = false;
     var ask = function () {
-      if (asked) return;
-      asked = true;
-      document.removeEventListener("touchend", ask, true);
-      document.removeEventListener("click", ask, true);
-      var granted = function (p) {
-        return p.then(function (s) { return s === "granted"; }, function () { return false; });
-      };
-      var motion = granted(DeviceMotionEvent.requestPermission());
-      var orientation = window.DeviceOrientationEvent && typeof DeviceOrientationEvent.requestPermission === "function"
-        ? granted(DeviceOrientationEvent.requestPermission())
-        : Promise.resolve(true);
-      Promise.all([motion, orientation]).then(function (r) { listen(r[0], r[1]); });
+      if (busy) return;
+      busy = true;
+      stats.permission = "frage …";
+      Promise.all([request(window.DeviceMotionEvent), request(window.DeviceOrientationEvent)]).then(function (r) {
+        stats.permission = "Bewegung: " + r[0] + ", Lage: " + r[1];
+        var motionOk = r[0] === "granted";
+        var orientationOk = r[1] === "granted";
+        var final = motionOk || r[0] === "denied";
+        if (final) {
+          document.removeEventListener("touchend", ask, true);
+          document.removeEventListener("click", ask, true);
+        }
+        // Lage allein reicht nicht zum Schütteln, Bewegung allein schon (Schwerkraft-Fallback).
+        if (motionOk) listen(true, orientationOk);
+        busy = false;
+      });
     };
     document.addEventListener("touchend", ask, true);
     document.addEventListener("click", ask, true);
   } else {
+    stats.permission = "nicht nötig";
     listen(true, true);
+  }
+
+  function createDebug() {
+    var box = document.createElement("pre");
+    box.style.cssText = "position:fixed;left:8px;bottom:8px;z-index:20;margin:0;padding:8px 10px;" +
+      "font:11px/1.4 ui-monospace,monospace;color:#fff;background:rgba(0,0,0,.75);border-radius:8px;" +
+      "pointer-events:none;white-space:pre-wrap;max-width:calc(100% - 16px)";
+    document.body.appendChild(box);
+    return box;
+  }
+
+  function fmt(v) { return v === null || v === undefined ? "–" : Math.round(v); }
+
+  if (debug) {
+    setInterval(function () {
+      debug.textContent =
+        "Erlaubnis: " + stats.permission + "\n" +
+        "Bewegungs-Events: " + stats.motionEvents + "  (Stärke " + stats.accel.toFixed(1) + ", Schütteln ab " + SHAKE_START + ")\n" +
+        "Lage-Events: " + stats.orientationEvents + "  (β " + fmt(stats.beta) + "°, γ " + fmt(stats.gamma) + "°)\n" +
+        "Schwerkraft: x " + grav.x.toFixed(2) + ", y " + grav.y.toFixed(2) + "\n" +
+        "Flocken: " + flakes.length + "  ·  Drehung: " + screenAngle() + "°";
+    }, 250);
   }
 
   window.addEventListener("resize", resize);

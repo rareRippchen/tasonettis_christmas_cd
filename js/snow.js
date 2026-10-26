@@ -325,6 +325,8 @@
     stage = STAGES.length;
     var finish = function () {
       root.classList.remove("snowed");
+      var theme = document.getElementById("theme-color");
+      if (theme) theme.setAttribute("content", "#141820");
       cover.remove();
       showFinalSnowman();
     };
@@ -352,7 +354,8 @@
     manCtx.clearRect(0, 0, W, H);
     var vh = visibleHeight();
     var s = Math.max(0.9, Math.min(1.6, Math.min(W, vh) / 360));
-    drawSnowman(manCtx, W / 2, vh - 28 * s, s, shown);
+    // Abstand nach unten: iOS legt Leisten über den Seitenrand.
+    drawSnowman(manCtx, W / 2, vh - Math.max(28 * s, vh * 0.12), s, shown);
   }
 
   /* ---------- Schleife ---------- */
