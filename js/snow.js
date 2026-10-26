@@ -159,8 +159,14 @@
   var measurePending = false;
   var covered = true;
 
+  // Tatsächlich sichtbare Höhe (ohne Browserleisten).
+  function visibleHeight() {
+    var vv = window.visualViewport;
+    return Math.min(H, vv ? vv.height : window.innerHeight);
+  }
+
   function brushRadius() {
-    return Math.max(26, Math.min(48, Math.min(W, H) * 0.075));
+    return Math.max(26, Math.min(48, Math.min(W, visibleHeight()) * 0.075));
   }
 
   function sizeCanvases(keepSnow) {
@@ -171,8 +177,9 @@
       old.height = layer.height;
       old.getContext("2d").drawImage(layer, 0, 0);
     }
-    W = window.innerWidth;
-    H = window.innerHeight;
+    // Maße vom Element selbst: Es ist bewusst höher als das Fenster (siehe CSS).
+    W = cover.clientWidth;
+    H = cover.clientHeight;
     [layer, manCanvas].forEach(function (c) {
       c.width = Math.round(W * dpr);
       c.height = Math.round(H * dpr);
@@ -266,12 +273,13 @@
     }, 150);
   }
 
-  // Grob abtasten, wie viel der Fläche schon frei ist.
+  // Grob abtasten, wie viel der sichtbaren Fläche schon frei ist.
   function measure() {
     if (!covered) return;
-    var data = layerCtx.getImageData(0, 0, layer.width, layer.height).data;
+    var rows = Math.min(layer.height, Math.round(visibleHeight() * dpr));
+    var data = layerCtx.getImageData(0, 0, layer.width, rows).data;
     var step = Math.round(14 * dpr), total = 0, free = 0;
-    for (var y = 0; y < layer.height; y += step) {
+    for (var y = 0; y < rows; y += step) {
       for (var x = 0; x < layer.width; x += step) {
         total++;
         if (data[(y * layer.width + x) * 4 + 3] < 60) free++;
@@ -286,7 +294,8 @@
   }
 
   function point(e) {
-    return { x: e.clientX, y: e.clientY };
+    var rect = cover.getBoundingClientRect();
+    return { x: e.clientX - rect.left, y: e.clientY - rect.top };
   }
 
   cover.addEventListener("pointerdown", function (e) {
@@ -341,8 +350,9 @@
 
   function drawCoverSnowman() {
     manCtx.clearRect(0, 0, W, H);
-    var s = Math.max(0.9, Math.min(1.6, Math.min(W, H) / 360));
-    drawSnowman(manCtx, W / 2, H - 28 * s, s, shown);
+    var vh = visibleHeight();
+    var s = Math.max(0.9, Math.min(1.6, Math.min(W, vh) / 360));
+    drawSnowman(manCtx, W / 2, vh - 28 * s, s, shown);
   }
 
   /* ---------- Schleife ---------- */
@@ -356,13 +366,16 @@
   }
 
   var resizeTimer;
-  window.addEventListener("resize", function () {
+  function onResize() {
     clearTimeout(resizeTimer);
     resizeTimer = setTimeout(function () {
       resizeSky();
-      if (cover.isConnected) sizeCanvases(true);
+      if (cover.isConnected && (cover.clientWidth !== W || cover.clientHeight !== H)) sizeCanvases(true);
     }, 150);
-  });
+  }
+  window.addEventListener("resize", onResize);
+  // iOS: Leisten ein-/ausfahren ändert nur den visualViewport.
+  if (window.visualViewport) window.visualViewport.addEventListener("resize", onResize);
 
   resizeSky();
   sizeCanvases(false);

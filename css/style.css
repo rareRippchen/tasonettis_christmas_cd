@@ -114,10 +114,19 @@ body {
 /* Schneedecke */
 .snowcover { display: none; }
 .snowed, .snowed body { overflow: hidden; }
+/* Solange Schnee liegt, nichts unterhalb des Bildschirms rendern
+   (iOS Safari zeigt Inhalte hinter der durchsichtigen Werkzeugleiste). */
+.snowed, .snowed body { height: 100%; }
 .snowed .snowcover {
   display: block;
   position: fixed;
-  inset: 0;
+  top: 0;
+  left: 0;
+  right: 0;
+  /* Größer als der sichtbare Bereich, damit auch die Fläche hinter
+     ein-/ausfahrenden Browserleisten zugeschneit ist. */
+  height: calc(100vh + 160px);
+  height: calc(100lvh + 160px);
   z-index: 10;
   touch-action: none;
   cursor: grab;
@@ -133,7 +142,8 @@ body {
 .snow-hint {
   position: absolute;
   left: 50%;
-  top: 38%;
+  top: 38vh;
+  top: 38svh;
   transform: translate(-50%, -50%);
   margin: 0;
   width: max-content;
