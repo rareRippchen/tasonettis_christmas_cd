@@ -35,9 +35,10 @@
   var debug = /[?&]sensor\b/.test(location.search) ? createDebug() : null;
   var stats = { permission: "–", motionEvents: 0, orientationEvents: 0, accel: 0, beta: null, gamma: null };
 
+  // Maße vom Element (100lvh), nicht innerHeight: Das endet in iOS-Safari über der URL-Leiste.
   function resize() {
-    W = window.innerWidth;
-    H = window.innerHeight;
+    W = canvas.clientWidth || window.innerWidth;
+    H = canvas.clientHeight || window.innerHeight;
     canvas.width = Math.round(W * dpr);
     canvas.height = Math.round(H * dpr);
     ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
@@ -305,5 +306,6 @@
   }
 
   window.addEventListener("resize", resize);
+  if (window.visualViewport) window.visualViewport.addEventListener("resize", resize);
   resize();
 })();

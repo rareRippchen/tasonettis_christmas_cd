@@ -144,7 +144,6 @@ body {
 .snowcover:active { cursor: grabbing; }
 .snowcover.melting { opacity: 0; transform: translateY(40px); pointer-events: none; }
 .snowcover canvas { position: absolute; inset: 0; width: 100%; height: 100%; }
-#snowman { pointer-events: none; }
 .snow-hint {
   position: absolute;
   left: 50%;
@@ -182,17 +181,16 @@ body {
 /* Easter Egg: Schneekugel – über allem, aber nicht anklickbar */
 #snowglobe {
   position: fixed;
-  inset: 0;
+  top: 0;
+  left: 0;
   width: 100%;
-  height: 100%;
+  /* Bis zum echten Bildschirmrand – auch hinter der schwebenden iOS-Leiste,
+     damit sich der Schnee am Glasrand sammelt und nicht über der URL-Leiste. */
+  height: 100vh;
+  height: 100lvh;
   z-index: 11;
   pointer-events: none;
 }
-
-/* Fertiger Schneemann am Seitenende */
-.snowman-slot { margin-top: 28px; animation: pop-in .8s ease both; }
-.snowman-slot canvas { display: block; width: 160px; height: 170px; }
-@keyframes pop-in { from { opacity: 0; transform: translateY(12px); } }
 
 /* Fuß */
 .footer { margin-top: 24px; display: flex; gap: 20px; }
@@ -201,5 +199,4 @@ body {
 
 @media (prefers-reduced-motion: reduce) {
   .service, .service .arrow, .snowcover, .snow-hint { transition: none; }
-  .snowman-slot { animation: none; }
 }
