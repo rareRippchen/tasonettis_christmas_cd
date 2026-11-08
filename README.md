@@ -14,6 +14,10 @@ Aktuell mit dem Platzhalter **„Klavier To Go“** (2017, UPC 4050215330047).
 - Ist der Termin erreicht, ersetzt die Meldung „Die neue CD ist da!“ den Countdown.
 - Dateien: `css/wartung.css`, `js/countdown.js`, Bild `assets/musik-baustelle.webp`.
 
+## Design: hell & dunkel
+
+Beide Seiten übernehmen Farben und Schriften der neuen Tastonettis-Website (Rot `#ed1c24`, Systemschrift, Überschriften in `ui-rounded`) und wechseln automatisch zwischen hellem und dunklem Design – je nach Systemeinstellung (`prefers-color-scheme`). Die Farben stehen als Variablen oben in `css/style.css` bzw. `css/wartung.css`.
+
 ## Lokal ansehen
 
 ```sh
@@ -33,7 +37,7 @@ python3 -m http.server 8000
 
 ## DSGVO
 
-Die Seite lädt **nichts von fremden Servern**: die Schrift (Plus Jakarta Sans) liegt unter `assets/fonts/`, alle Bilder und Icons unter `assets/`. Es gibt keine Cookies, kein Tracking und keine eingebetteten Player. Externe Dienste werden nur über normale Links erreicht, also erst, wenn man darauf klickt.
+Die Seite lädt **nichts von fremden Servern**: Es werden die Systemschriften des Geräts genutzt (wie auf der neuen Tastonettis-Website), alle Bilder und Icons liegen unter `assets/`. Es gibt keine Cookies, kein Tracking und keine eingebetteten Player. Externe Dienste werden nur über normale Links erreicht, also erst, wenn man darauf klickt.
 
 Die Regeln für künftige Änderungen stehen in `CLAUDE.md`. Prüfen lässt sich das mit:
 

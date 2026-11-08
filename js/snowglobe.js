@@ -205,12 +205,14 @@
   }
 
   function render() {
+    // Im hellen Design blaugraue Flocken, sonst wären sie auf Weiß unsichtbar.
+    var rgb = window.matchMedia("(prefers-color-scheme: dark)").matches ? "255, 255, 255" : "140, 160, 190";
     ctx.clearRect(0, 0, W, H);
     for (var i = 0; i < flakes.length; i++) {
       var f = flakes[i];
       ctx.beginPath();
       ctx.arc(f.x, f.y, f.r, 0, Math.PI * 2);
-      ctx.fillStyle = "rgba(255, 255, 255," + f.draw + ")";
+      ctx.fillStyle = "rgba(" + rgb + "," + f.draw + ")";
       ctx.fill();
     }
   }

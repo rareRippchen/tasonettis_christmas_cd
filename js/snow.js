@@ -5,6 +5,10 @@
   var dpr = Math.min(window.devicePixelRatio || 1, 2);
   var root = document.documentElement;
 
+  // Hell/Dunkel nach Systemeinstellung: Flocken auf hellem Grund blaugrau statt weiß.
+  var darkQuery = window.matchMedia("(prefers-color-scheme: dark)");
+  function flakeRGB() { return darkQuery.matches ? "220, 226, 235" : "150, 168, 192"; }
+
   /* ---------- Fallender Schnee im Hintergrund ---------- */
   var sky = document.getElementById("snowfall");
   var skyCtx = sky.getContext("2d");
@@ -32,6 +36,7 @@
 
   function drawSky() {
     skyCtx.clearRect(0, 0, window.innerWidth, window.innerHeight);
+    var rgb = flakeRGB();
     for (var i = 0; i < flakes.length; i++) {
       var f = flakes[i];
       if (!reduceMotion) {
@@ -42,7 +47,7 @@
       }
       skyCtx.beginPath();
       skyCtx.arc(f.x, f.y, f.r, 0, Math.PI * 2);
-      skyCtx.fillStyle = "rgba(220, 226, 235," + f.alpha + ")";
+      skyCtx.fillStyle = "rgba(" + rgb + "," + f.alpha + ")";
       skyCtx.fill();
     }
   }
@@ -216,8 +221,7 @@
     covered = false;
     var finish = function () {
       root.classList.remove("snowed");
-      var theme = document.getElementById("theme-color");
-      if (theme) theme.setAttribute("content", "#141820");
+      syncThemeColor();
       cover.remove();
     };
     cover.classList.add("melting");
@@ -242,6 +246,14 @@
   window.addEventListener("resize", onResize);
   // iOS: Leisten ein-/ausfahren ändert nur den visualViewport.
   if (window.visualViewport) window.visualViewport.addEventListener("resize", onResize);
+
+  // Browserleiste: schneefarben solange Schnee liegt, danach Seitenhintergrund (hell/dunkel).
+  function syncThemeColor() {
+    var theme = document.getElementById("theme-color");
+    if (!theme || root.classList.contains("snowed")) return;
+    theme.setAttribute("content", getComputedStyle(document.body).backgroundColor);
+  }
+  if (darkQuery.addEventListener) darkQuery.addEventListener("change", syncThemeColor);
 
   resizeSky();
   sizeCanvases(false);
