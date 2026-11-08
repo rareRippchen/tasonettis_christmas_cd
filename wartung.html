@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Tastonettis – Musik-Baustelle</title>
+  <meta name="description" content="Die Tastonettis bauen an ihrer neuen CD. Sie erscheint an Weihnachten – bis dahin läuft der Countdown.">
+  <meta name="theme-color" content="#ffffff">
+  <meta name="color-scheme" content="light">
+  <link rel="icon" href="assets/favicon.ico">
+  <link rel="stylesheet" href="css/fonts.css?v=37af43b59a">
+  <link rel="stylesheet" href="css/wartung.css?v=580059aef3">
+</head>
+<body>
+  <div class="tape" aria-hidden="true"></div>
+
+  <main class="page">
+    <a class="logo" href="https://tastonettis.de/" target="_blank" rel="noopener">
+      <img src="assets/tastonettis-logo.svg" alt="Tastonettis" width="282" height="59">
+    </a>
+
+    <img class="sign" src="assets/musik-baustelle.webp" width="1200" height="857"
+         alt="Warnschild „Musik-Baustelle“: Ein rotes Akkordeon-Männchen dirigiert, während unter dem Schild Noten aus einem Erdhaufen wirbeln.">
+
+    <h1 class="headline">Hier wird gerade Musik gebaut.</h1>
+    <p class="lead">
+      An Weihnachten erscheint unsere <strong>neue CD</strong>.
+      Wie sie heißt und welche Songs drauf sind? Das bleibt bis dahin unser Geheimnis.
+    </p>
+
+    <!-- Erscheinungstermin: data-release (ISO-Zeit mit Zeitzone). -->
+    <section class="countdown" id="countdown" data-release="2026-12-24T00:00:00+01:00"
+             aria-labelledby="countdown-label">
+      <p class="countdown-label" id="countdown-label">Noch bis zur Veröffentlichung</p>
+      <div class="units" role="timer" aria-live="off">
+        <div class="unit"><span class="num" data-unit="days">–</span><span class="name">Tage</span></div>
+        <div class="unit"><span class="num" data-unit="hours">–</span><span class="name">Stunden</span></div>
+        <div class="unit"><span class="num" data-unit="minutes">–</span><span class="name">Minuten</span></div>
+        <div class="unit"><span class="num" data-unit="seconds">–</span><span class="name">Sekunden</span></div>
+      </div>
+      <p class="date">24. Dezember 2026</p>
+    </section>
+
+    <section class="released" id="released" hidden>
+      <p class="released-title">Die neue CD ist da!</p>
+      <p class="released-text">Gleich geht es hier weiter – schaut in Kürze wieder vorbei.</p>
+    </section>
+
+    <p class="more">
+      Bis dahin: Termine, Fotos und alles über uns auf
+      <a href="https://tastonettis.de/" target="_blank" rel="noopener">tastonettis.de</a>
+    </p>
+
+    <footer class="footer">
+      <a href="https://tastonettis.de/impressum.php" target="_blank" rel="noopener">Impressum</a>
+      <a href="https://tastonettis.de/datenschutz.php" target="_blank" rel="noopener">Datenschutz</a>
+    </footer>
+  </main>
+
+  <script src="js/countdown.js?v=0a23862ab6"></script>
+</body>
+</html>

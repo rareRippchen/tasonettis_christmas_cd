@@ -20,7 +20,7 @@ python3 scripts/check-external.py
 
 ## Cache-Busting – nach jeder Änderung an CSS/JS
 
-CSS- und JS-Dateien werden in `index.html` mit Inhalts-Fingerabdruck eingebunden (`js/snow.js?v=…`),
+CSS- und JS-Dateien werden in allen HTML-Seiten (`index.html`, `wartung.html`) mit Inhalts-Fingerabdruck eingebunden (`js/snow.js?v=…`),
 damit Browser nie neues HTML mit alten, zwischengespeicherten Skripten kombinieren.
 Nach jeder Änderung an `css/` oder `js/` ausführen (die GitHub Action prüft es):
 

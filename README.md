@@ -6,6 +6,14 @@ Statische Landingpage für die Weihnachts-CD der Tastonettis: Logo, Weihnachtsgr
 
 Aktuell mit dem Platzhalter **„Klavier To Go“** (2017, UPC 4050215330047).
 
+## Wartungsseite (bis Weihnachten)
+
+`wartung.html` ist die Wartungsseite „Musik-Baustelle“ mit Countdown bis zur Veröffentlichung der neuen CD (Titel und Songs noch geheim; **keine** Weihnachts-CD). Zum Testen liegt sie als eigene Datei neben `index.html`.
+
+- Termin: `data-release` am Countdown in `wartung.html` (derzeit `2026-12-24T00:00:00+01:00`) und das angezeigte Datum darunter.
+- Ist der Termin erreicht, ersetzt die Meldung „Die neue CD ist da!“ den Countdown.
+- Dateien: `css/wartung.css`, `js/countdown.js`, Bild `assets/musik-baustelle.webp`.
+
 ## Lokal ansehen
 
 ```sh
