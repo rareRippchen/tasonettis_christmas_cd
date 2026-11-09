@@ -144,23 +144,16 @@ a:hover { color: var(--brand-hover); }
 }
 .lead strong { color: var(--text); }
 
-/* Hinweis: kein Weihnachtsalbum */
-.note {
-  display: flex;
-  gap: .9rem;
-  align-items: flex-start;
-  max-width: 34em;
-  margin: .4rem 0 1.2rem;
-  padding: 1rem 1.2rem;
-  text-align: left;
-  background: var(--bg-alt);
-  border: 1px solid var(--border);
-  border-left: 4px solid var(--brand);
-  border-radius: var(--radius-sm);
+/* Hinweis: kein Weihnachtsalbum – zurückhaltend, fließt mit dem Text */
+.note { max-width: 30em; margin: .6rem 0 1.4rem; }
+.note-title {
+  margin: 0 0 .2rem;
+  font-family: var(--font-display);
+  font-size: clamp(1.2rem, 4vw, 1.4rem);
+  font-weight: 800;
+  color: var(--brand);
 }
-.note-icon { flex: none; font-size: 1.4rem; line-height: 1.3; }
-.note p { margin: 0; color: var(--text-muted); }
-.note strong { display: block; color: var(--text); font-family: var(--font-display); font-size: 1.05rem; }
+.note-text { margin: 0; font-size: clamp(1.05rem, 1.6vw, 1.15rem); color: var(--text-muted); }
 
 /* Countdown – wie auf der neuen Website */
 .countdown {
