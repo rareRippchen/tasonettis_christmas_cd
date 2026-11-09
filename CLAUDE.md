@@ -1,4 +1,4 @@
-# Tastonettis – Weihnachts-CD
+# Tastonettis – Album-Website
 
 Statische Landingpage (HTML/CSS/JS, kein Build-Schritt).
 
@@ -12,6 +12,16 @@ Statische Landingpage (HTML/CSS/JS, kein Build-Schritt).
 - Fremde Logos/Grafiken als lokale Datei ablegen, nie direkt verlinken.
 - Impressum **und** Datenschutzerklärung müssen im Footer verlinkt bleiben.
 
+## Sprache
+
+- Das neue Album erscheint **nur digital**: nie „CD“ schreiben, sondern „Album“ oder „Aufnahme“.
+- Es ist **kein Weihnachtsalbum** – Weihnachten nur als Erscheinungstermin erwähnen.
+
+## Wartungsseite
+
+`wartung/` ist eigenständig (eigene `css/`, `js/`, `assets/`, Impressum und Datenschutz) und wird
+als Ganzes auf tastonettis.de hochgeladen. Nur relative Pfade innerhalb des Ordners verwenden.
+
 Vor jedem Commit ausführen (läuft auch als GitHub Action):
 
 ```sh
@@ -20,7 +30,7 @@ python3 scripts/check-external.py
 
 ## Cache-Busting – nach jeder Änderung an CSS/JS
 
-CSS- und JS-Dateien werden in allen HTML-Seiten (`index.html`, `wartung.html`) mit Inhalts-Fingerabdruck eingebunden (`js/snow.js?v=…`),
+CSS- und JS-Dateien werden in allen HTML-Seiten (`index.html`, `wartung/*.html`) mit Inhalts-Fingerabdruck eingebunden (`js/snow.js?v=…`),
 damit Browser nie neues HTML mit alten, zwischengespeicherten Skripten kombinieren.
 Nach jeder Änderung an `css/` oder `js/` ausführen (die GitHub Action prüft es):
 

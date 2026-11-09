@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Tastonettis – Neues Album in Arbeit</title>
+  <meta name="description" content="Nach sieben Jahren endlich wieder neue Musik: Das neue Album der Tastonettis erscheint am 24.12.2026 digital. Kein Weihnachtsalbum – nur der Erscheinungstag ist Heiligabend.">
+  <meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)">
+  <meta name="theme-color" content="#212228" media="(prefers-color-scheme: dark)">
+  <meta name="color-scheme" content="light dark">
+  <link rel="icon" href="assets/favicon.ico">
+  <link rel="stylesheet" href="css/wartung.css?v=50338f88d0">
+  <script src="js/theme.js?v=e392218668"></script>
+</head>
+<body>
+  <div class="tape" aria-hidden="true"></div>
+
+  <main class="page">
+    <button type="button" class="theme-toggle" id="theme-toggle" aria-pressed="false" aria-label="Dunkles Design einschalten" hidden>
+      <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg>
+      <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="4.5"/><path d="M12 1.5v2.5M12 20v2.5M4.6 4.6l1.8 1.8M17.6 17.6l1.8 1.8M1.5 12H4M20 12h2.5M4.6 19.4l1.8-1.8M17.6 6.4l1.8-1.8"/></svg>
+    </button>
+
+    <img class="logo" src="assets/tastonettis-logo.svg" alt="Tastonettis" width="282" height="59">
+
+    <div class="sign-wrap">
+      <img class="sign" src="assets/musik-baustelle.webp" width="1200" height="857"
+           alt="Warnschild „Musik-Baustelle“: Ein rotes Akkordeon-Männchen dirigiert, während unter dem Schild Noten aus einem Erdhaufen wirbeln.">
+    </div>
+
+    <p class="eyebrow">Neues Album · 24.12.2026</p>
+    <h1 class="headline">Hier wird gerade Musik gebaut.</h1>
+    <p class="lead">
+      Nach sieben Jahren ist es endlich wieder so weit: Die Tastonettis veröffentlichen
+      ein <strong>neues Album</strong>. Es erscheint ausschließlich digital.
+    </p>
+
+    <div class="note">
+      <span class="note-icon" aria-hidden="true">🎵</span>
+      <p>
+        <strong>Kein Weihnachtsalbum!</strong>
+        Mit Weihnachten hat das Album nichts zu tun – nur der Erscheinungstermin fällt auf Heiligabend.
+      </p>
+    </div>
+
+    <p class="lead">
+      Wie es heißt, welche Titel drauf sind und wie das Cover aussieht?
+      Das bleibt bis dahin unser Geheimnis.
+    </p>
+
+    <!-- Erscheinungstermin: data-release (ISO-Zeit mit Zeitzone, MEZ = +01:00). -->
+    <section class="countdown" id="countdown" data-release="2026-12-24T16:21:00+01:00"
+             aria-labelledby="countdown-label">
+      <p class="countdown-label" id="countdown-label">Noch bis zur Veröffentlichung am 24.12.2026 um 16:21 Uhr</p>
+      <div class="units" role="timer" aria-live="off">
+        <div class="unit"><span class="num" data-unit="days">–</span><span class="name">Tage</span></div>
+        <div class="unit"><span class="num" data-unit="hours">–</span><span class="name">Stunden</span></div>
+        <div class="unit"><span class="num" data-unit="minutes">–</span><span class="name">Minuten</span></div>
+        <div class="unit"><span class="num" data-unit="seconds">–</span><span class="name">Sekunden</span></div>
+      </div>
+    </section>
+
+    <section class="released" id="released" hidden>
+      <p class="released-title">Das neue Album ist da!</p>
+      <p class="released-text">Gleich geht es hier weiter – schaut in Kürze wieder vorbei.</p>
+    </section>
+
+    <nav class="socials" aria-label="Tastonettis in sozialen Netzwerken">
+      <a href="https://www.youtube.com/@DieTastonettis" target="_blank" rel="noopener">YouTube</a>
+      <a href="https://www.instagram.com/tastonettis/" target="_blank" rel="noopener">Instagram</a>
+      <a href="https://www.facebook.com/tastonettis/" target="_blank" rel="noopener">Facebook</a>
+    </nav>
+
+    <footer class="footer">
+      <a href="impressum.html" data-internal>Impressum</a>
+      <a href="datenschutz.html" data-internal>Datenschutz</a>
+    </footer>
+  </main>
+
+  <script src="js/countdown.js?v=ea769af0ea"></script>
+</body>
+</html>

@@ -1,18 +1,24 @@
-# Tastonettis – Weihnachts-CD
+# Tastonettis – Album-Website
 
-Statische Landingpage für die Weihnachts-CD der Tastonettis: Logo, Weihnachtsgruß, Albumcover, Streaming-Links und Impressum. Beim Laden liegt die ganze Seite unter einer Schneedecke: Man schiebt sie mit dem Finger (oder der Maus) frei; ab etwa der Hälfte rutscht der Rest ab. Oben rechts lässt sich der Schnee auch überspringen.
+Statische Landingpage für das neue Album der Tastonettis (`index.html`, ab Veröffentlichung): Logo, Gruß, Albumcover, Streaming-Links und Impressum. Beim Laden liegt die ganze Seite unter einer Schneedecke: Man schiebt sie mit dem Finger (oder der Maus) frei; ab etwa der Hälfte rutscht der Rest ab. Oben rechts lässt sich der Schnee auch überspringen.
 
 **Easter Egg:** Das Handy ist eine Schneekugel (`js/snowglobe.js`): Schütteln wirbelt Schnee auf, er sinkt immer dorthin, wo bei der aktuellen Haltung unten ist (auch kopfüber und quer), sammelt sich am Rand und schmilzt nach einer Weile. Auf dem iPhone fragt iOS nach dem ersten Wischen einmal nach der Erlaubnis für Bewegungsdaten. Die Sensordaten werden nur im Browser ausgewertet und nirgendwohin gesendet.
 
 Aktuell mit dem Platzhalter **„Klavier To Go“** (2017, UPC 4050215330047).
 
-## Wartungsseite (bis Weihnachten)
+## Wartungsseite (bis zur Veröffentlichung des neuen Albums)
 
-`wartung.html` ist die Wartungsseite „Musik-Baustelle“ mit Countdown bis zur Veröffentlichung der neuen CD (Titel und Songs noch geheim; **keine** Weihnachts-CD). Zum Testen liegt sie als eigene Datei neben `index.html`.
+Der Ordner `wartung/` ist eine **eigenständige** Website, die bis zur Veröffentlichung die ganze Tastonettis-Website ersetzt:
 
-- Termin: `data-release` am Countdown in `wartung.html` (derzeit `2026-12-24T00:00:00+01:00`) und das angezeigte Datum darunter.
-- Ist der Termin erreicht, ersetzt die Meldung „Die neue CD ist da!“ den Countdown.
-- Dateien: `css/wartung.css`, `js/countdown.js`, Bild `assets/musik-baustelle.webp`.
+- `index.html` – „Musik-Baustelle“ mit Countdown bis **24.12.2026, 16:21 Uhr** (neues Album, erscheint nur digital, Titel/Songs noch geheim; **kein** Weihnachtsalbum – nur der Erscheinungstag ist Heiligabend). Ist der Termin erreicht, erscheint „Das neue Album ist da!“.
+- `impressum.html`, `datenschutz.html` – Rechtstexte (Grundlage: neue Tastonettis-Website, angepasst an diese Seite).
+- `css/`, `js/`, `assets/` – alles, was die Seiten brauchen; nichts wird von außerhalb des Ordners geladen.
+
+Hell/Dunkel folgt der Systemeinstellung und lässt sich oben rechts umschalten. Die Wahl wird ohne Cookies/Speicher als `?theme=…` an interne Links weitergegeben.
+
+**Live schalten:** den *Inhalt* von `wartung/` in das Hauptverzeichnis des Webspaces von tastonettis.de hochladen (die bisherigen Dateien vorher sichern). Termin ändern: `data-release` in `wartung/index.html` und den Text des Countdown-Labels.
+
+**Testen:** auf GitHub Pages unter `…/wartung/`.
 
 ## Design: hell & dunkel
 

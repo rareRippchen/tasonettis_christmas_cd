@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
-"""Cache-Busting: hängt an CSS/JS-Verweise in allen HTML-Seiten (index.html, wartung.html, …)
-einen Inhalts-Fingerabdruck an (?v=…).
+"""Cache-Busting: hängt an CSS/JS-Verweise in allen HTML-Seiten (index.html, wartung/*.html, …)
+einen Inhalts-Fingerabdruck an (?v=…). Pfade werden relativ zur jeweiligen Seite aufgelöst.
 
 Ändert sich eine Datei, ändert sich ihre Adresse – Browser laden sie dann sicher neu,
 statt eine veraltete Version aus dem Cache mit neuem HTML zu kombinieren.
@@ -14,12 +14,13 @@ import re
 import sys
 
 ROOT = pathlib.Path(__file__).resolve().parent.parent
-PAGES = sorted(ROOT.glob("*.html"))
+SKIP_DIRS = {".git", "node_modules", "scripts", ".github"}
+PAGES = sorted(p for p in ROOT.rglob("*.html") if not SKIP_DIRS.intersection(p.relative_to(ROOT).parts))
 REF = re.compile(r'((?:href|src)=")((?:css|js)/[^"?#]+\.(?:css|js))(?:\?v=[^"]*)?(")')
 
 
-def fingerprint(rel):
-    return hashlib.sha256((ROOT / rel).read_bytes()).hexdigest()[:10]
+def fingerprint(page, rel):
+    return hashlib.sha256((page.parent / rel).read_bytes()).hexdigest()[:10]
 
 
 def main():
@@ -27,10 +28,10 @@ def main():
     stale = []
     for page in PAGES:
         text = page.read_text(encoding="utf-8")
-        updated = REF.sub(lambda m: f"{m.group(1)}{m.group(2)}?v={fingerprint(m.group(2))}{m.group(3)}", text)
+        updated = REF.sub(lambda m: f"{m.group(1)}{m.group(2)}?v={fingerprint(page, m.group(2))}{m.group(3)}", text)
         if updated == text:
             continue
-        stale.append(page.name)
+        stale.append(str(page.relative_to(ROOT)))
         if not check:
             page.write_text(updated, encoding="utf-8")
 

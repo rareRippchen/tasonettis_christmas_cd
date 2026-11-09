@@ -1,4 +1,4 @@
-/* Countdown bis zur Veröffentlichung der neuen CD (Termin steht in data-release). */
+/* Countdown bis zur Veröffentlichung des neuen Albums (Termin steht in data-release). */
 (function () {
   "use strict";
 
